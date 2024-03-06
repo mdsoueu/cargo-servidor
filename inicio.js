@@ -2,145 +2,126 @@ const espresso = require('express');
 const meuServidor = espresso();
 meuServidor.use(espresso.json());
 
-const lista = [
+const cargo = [
     {
         id: 1,
         nome: 'Aa',
-        idade: 21,
-        funcao: 'Diretor',
+        funcao: 'Gerente de Projetos',
         descricao: 'profissional responsável por planejar, coordenar e supervisionar a execução de projetos dentro de uma organização.'
     }
 ];
 
 /* GET - consulta */
-meuServidor.get('/principal', (requisicao, resposta) => {
+meuServidor.get('/cargo', (requisicao, resposta) => {
     let respostas = '';
-    for (let index = 0; index < lista.length; index++) {
-        const trabalho = lista[index];
+    for (let index = 0; index < cargo.length; index++) {
+        const usuario = cargo[index];
         respostas += '<p>';
         respostas += 'Código: ';
-        respostas += trabalho.id;
+        respostas += usuario.id;
         respostas += '</br>Nome: ';
-        respostas += trabalho.nome;
-        respostas += '</br>Idade: ';
-        respostas += trabalho.idade;
+        respostas += usuario.nome;
         respostas += '</br>Cargo: ';
-        respostas += trabalho.funcao;
+        respostas += usuario.funcao;
         respostas += '</br>Descrição: ';
-        respostas += trabalho.descricao;
+        respostas += usuario.descricao;
         respostas += '</p>';
     }
     resposta.send(respostas);
 });
-
-meuServidor.get('/principal/usuario/:id', (requisicao, resposta) => {
-    /*Criar uma rota para consultar um usuário pelo código de usuário.*/
-    const idUsuario = requisicao.params.id;
-    const identifacado = lista.find((atual) => {
-        return atual.id == idUsuario;
+meuServidor.get('/cargo/usuario/:id', (requisicao, resposta) => { 
+    /*Criar uma rota para consultar um usuário pelo código de usuário. */
+    const idCargo = requisicao.params.id;
+    const identifacado = cargo.find((atual) => {
+        return atual.id == idCargo;
     });
 
     const nome = requisicao.body.nome;
-    const idade = requisicao.body.idade;
-
+    const funcao = requisicao.body.funcao;
+    const descricao = requisicao.body.descricao;
+    
     identifacado.nome = nome;
-    identifacado.idade = idade;
+    identifacado.funcao = funcao;
+    identifacado.descricao = descricao;
 
     resposta.send();
 });
 
 /* POST - adicionar */
-meuServidor.post('/principal', (requisicao, resposta) => {
+meuServidor.post('/cargo', (requisicao, resposta) => {
     const nome = requisicao.body.nome;
-    const idade = requisicao.body.idade;
     const funcao = requisicao.body.funcao;
     const descricao = requisicao.body.descricao;
 
     let codigo = -99999999999999999;
-    for (let index = 0; index < lista.length; index++) {
-        const itemAtual = lista[index];
-        if (itemAtual.id > codigo) {
-            codigo = itemAtual.id;
+    for (let index = 0; index < cargo.length; index++) {
+        const cargoAtual = cargo[index];
+        if (cargoAtual.id > codigo) {
+            codigo = cargoAtual.id;
         }
     }
     if (codigo < 0) {
         codigo = 0;
     }
 
-    const novoItem = {
+    const novoCargo = {
         id: codigo + 1,
         nome: nome,
-        idade: idade,
         funcao: funcao,
         descricao: descricao
     };
-    lista.push(novoItem);
+    cargo.push(novoCargo);
     resposta.send();
 });
 
 /* PUT - atualizar */
-meuServidor.put('/principal/:id', (requisicao, resposta) => {
-    const codigoItem = requisicao.params.id;
-    const itemEncontrado = lista.find((itemAtual) => {
-        return itemAtual.id == codigoItem;
-    });
-    const nome = requisicao.body.nome;
-    const idade = requisicao.body.idade;
-    const funcao = requisicao.body.funcao;
-    const descricao = requisicao.body.descricao;
-
-    itemEncontrado.nome = nome;
-    itemEncontrado.idade = idade;
-    itemEncontrado.funcao = funcao;
-    itemEncontrado.descricao = descricao;
-
-    resposta.send();
-});
-meuServidor.put('/principal/usuario/:id', (requisicao, resposta) => {
+meuServidor.put('/cargo/:id', (requisicao, resposta) => {
     /*Criar uma rota para a atualização de um usuário pelo código do usuário. */
-    const codigoUsuario = requisicao.params.id;
-    const UsuarioEncontrado = lista.find((usuarioAtual) => {
-        return usuarioAtual.id == codigoUsuario;
-    });
-    const nome = requisicao.body.nome;
-    const idade = requisicao.body.idade;
-
-    UsuarioEncontrado.nome = nome;
-    UsuarioEncontrado.idade = idade;
-
-    resposta.send();
-});
-meuServidor.put('/principal/cargo/:id', (requisicao, resposta) => {
-    /*Criar uma rota para atualização de um cargo. */
     const codigoCargo = requisicao.params.id;
-    const cargoEncontrado = lista.find((cargoAtual) => {
+    const cargoEncontrado = cargo.find((cargoAtual) => {
         return cargoAtual.id == codigoCargo;
     });
+    const nome = requisicao.body.nome;
     const funcao = requisicao.body.funcao;
     const descricao = requisicao.body.descricao;
 
+    cargoEncontrado.nome = nome;
     cargoEncontrado.funcao = funcao;
     cargoEncontrado.descricao = descricao;
 
     resposta.send();
 });
+meuServidor.put('/cargo/funcao/:id', (requisicao, resposta) => {
+    /*Criar uma rota para atualização de um cargo. */
+    const codigoCargo = requisicao.params.id;
+    const cargoEncontrado = cargo.find((cargoAtual) => {
+        return cargoAtual.id == codigoCargo;
+    });
+    const funcao = requisicao.body.funcao;
+
+    cargoEncontrado.funcao = funcao;
+    
+    resposta.send();
+});
 
 /* DELETE - excluir */
-meuServidor.delete('/principal/:id', (requisicao, resposta) => {
+meuServidor.delete('/cargo/:id', (requisicao, resposta) => {
     /*Criar uma rota para a remoção de um usuário pelo código do usuário. */
-    const codigoUsuario = requisicao.params.id;
-    const usuarioEncontrado = lista.findIndex((usuarioAtual) => {
-        return usuarioAtual.id == codigoUsuario;
+    const codigoCargo = requisicao.params.id;
+    const cargoEncontrado = cargo.findIndex((cargoAtual) => {
+        return cargoAtual.id == codigoCargo;
     });
 
-    if (usuarioEncontrado !== -1) {
-        lista.splice(usuarioEncontrado, 1);
+    if (cargoEncontrado !== -1) {
+        cargo.splice(cargoEncontrado, 1);
 
-        resposta.send('Usuário excluído com sucesso.');
-    } else {
-        resposta.status(404).send('Usuário não encontrado.');
+        resposta.send('Cargo excluído com sucesso.');
+    }  else {
+        // Se o cargo não for encontrado, enviar uma resposta de erro
+        resposta.status(404).send('Cargo não encontrado.');
     }
 });
+
 
 meuServidor.listen(4300, () => {
     console.log('Meu primeiro servidor na porta 4300.');
