@@ -1,0 +1,25 @@
+{
+  "name": "cargo-serv",
+  "version": "1.0.0",
+  "description": "",
+  "main": "inicio.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdsoueu/cargo-servidor.git"
+  },
+  "author": "Maria Eduarda Pacheco de Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdsoueu/cargo-servidor/issues"
+  },
+  "homepage": "https://github.com/mdsoueu/cargo-servidor#readme",
+  "dependencies": {
+    "express": "^4.18.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
